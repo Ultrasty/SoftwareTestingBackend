@@ -32,11 +32,11 @@ def question2():
     df[4] = 0
     df[5] = 0
     for i in range(df.shape[0]):
-        df[4][i] = charges.compute(df[1][i], df[2][i])
-        if df[3][i] != df[4][i]:
-            df[5][i] = 0
+        df.loc[i, 4] = charges.compute(df[1][i], df[2][i])
+        if str(df[3][i]) != str(df[4][i]):
+            df.loc[i, 5] = "未通过测试"
         else:
-            df[5][i] = 1
+            df.loc[i, 5] = "通过测试"
 
     da = json.dumps(df.to_dict(orient='records'))
 
