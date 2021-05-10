@@ -36,8 +36,6 @@ def question2():
     response = make_response(da)
     response.headers['Access-Control-Allow-Origin'] = "*"
 
-
-
     return response
 
 
