@@ -8,7 +8,8 @@ import json
 import os
 from flask import Flask, make_response, request, redirect, url_for, send_from_directory
 import pandas as pd
-
+import charges.charges as charges
+import computer.computer as computer
 
 app = Flask(__name__)
 
@@ -28,9 +29,15 @@ def question2():
     file = request.files['file']
     file.save(os.getcwd() + '/' + file.filename)
     df = pd.read_csv(file.filename, sep=',', header=None)
+    df[4] = 0
+    df[5] = 0
     for i in range(df.shape[0]):
-        for j in range(df.shape[1]):
-            pass
+        df[4][i] = charges.compute(df[1][i], df[2][i])
+        if df[3][i] != df[4][i]:
+            df[5][i] = 0
+        else:
+            df[5][i] = 1
+
     da = json.dumps(df.to_dict(orient='records'))
 
     response = make_response(da)
