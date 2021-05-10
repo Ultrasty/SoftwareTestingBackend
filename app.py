@@ -24,6 +24,16 @@ def question2o():
     return response
 
 
+@app.route('/question3', methods=['OPTIONS'])
+def question3o():
+    response = make_response()
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
+    a = request
+    print(a)
+    return response
+
+
 @app.route('/question2', methods=['POST', 'GET'])
 def question2():
     file = request.files['file']
@@ -46,5 +56,27 @@ def question2():
     return response
 
 
+@app.route('/question3', methods=['POST', 'GET'])
+def question3():
+    file = request.files['file']
+    file.save(os.getcwd() + '/' + file.filename)
+    df = pd.read_csv(file.filename, sep=',', header=None)
+    df[5] = 0
+    df[6] = 0
+    for i in range(df.shape[0]):
+        df.loc[i, 5] = computer.compute(df[1][i], df[2][i], df[3][i])
+        if str(df[4][i]) != str(df[5][i]):
+            df.loc[i, 6] = "未通过测试"
+        else:
+            df.loc[i, 6] = "通过测试"
+
+    da = json.dumps(df.to_dict(orient='records'))
+
+    response = make_response(da)
+    response.headers['Access-Control-Allow-Origin'] = "*"
+
+    return response
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
