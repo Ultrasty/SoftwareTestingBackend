@@ -10,8 +10,19 @@ from flask import Flask, make_response, request, redirect, url_for, send_from_di
 import pandas as pd
 import charges.charges as charges
 import computer.computer as computer
+import triangle.triangle as triangle
 
 app = Flask(__name__)
+
+
+@app.route('/question1', methods=['OPTIONS'])
+def question1o():
+    response = make_response()
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
+    a = request
+    print(a)
+    return response
 
 
 @app.route('/question2', methods=['OPTIONS'])
@@ -31,6 +42,28 @@ def question3o():
     response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
     a = request
     print(a)
+    return response
+
+
+@app.route('/question1', methods=['POST', 'GET'])
+def question1():
+    file = request.files['file']
+    file.save(os.getcwd() + '/' + file.filename)
+    df = pd.read_csv(file.filename, sep=',', header=None)
+    df[5] = 0
+    df[6] = 0
+    for i in range(df.shape[0]):
+        df.loc[i, 5] = triangle.compute(df[1][i], df[2][i], df[3][i])
+        if str(df[4][i]) != str(df[5][i]):
+            df.loc[i, 6] = "未通过测试"
+        else:
+            df.loc[i, 6] = "通过测试"
+
+    da = json.dumps(df.to_dict(orient='records'))
+
+    response = make_response(da)
+    response.headers['Access-Control-Allow-Origin'] = "*"
+
     return response
 
 
