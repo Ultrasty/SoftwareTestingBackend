@@ -11,38 +11,11 @@ import pandas as pd
 import charges.charges as charges
 import computer.computer as computer
 import triangle.triangle as triangle
+from flask_cors import CORS
+from myutils import *
 
 app = Flask(__name__)
-
-
-@app.route('/question1', methods=['OPTIONS'])
-def question1o():
-    response = make_response()
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
-    a = request
-    print(a)
-    return response
-
-
-@app.route('/question2', methods=['OPTIONS'])
-def question2o():
-    response = make_response()
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
-    a = request
-    print(a)
-    return response
-
-
-@app.route('/question3', methods=['OPTIONS'])
-def question3o():
-    response = make_response()
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Allow'] = "HEAD, POST, OPTIONS, GET"
-    a = request
-    print(a)
-    return response
+CORS(app, supports_credentials=True)
 
 
 @app.route('/question1', methods=['POST', 'GET'])
