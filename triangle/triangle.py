@@ -24,7 +24,7 @@ class Triangle:
         if a + c > b and a + b > c and c + b > a:
             if a == b == c:
                 return "Equilateral triangle"
-            elif a == b or b == c or b == c:
+            elif a == b or b == c or a == c:
                 return "Isosceles triangle"
             else:
                 return "Normal triangle"
